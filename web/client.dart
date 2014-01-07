@@ -94,7 +94,9 @@ class Client {
     print("$playnames");
     playListElement.children.clear();
     for (var name in playnames) {
-      addPlayName(name);
+      if (name != playName) {
+        addPlayName(name);
+      }
     }
   }
   
@@ -107,6 +109,14 @@ class Client {
     
     link.onClick.listen((e) {
       print('opponent of your choice $name');
+      
+      var uid = forceClient.generateId();
+      var request = {
+                     'gameId': uid,
+                     'opponent': name
+      };
+      
+      forceClient.send("start", request );
     });
   }
   
