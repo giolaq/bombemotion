@@ -29,6 +29,9 @@
           margin: 10px 0 20px 0;
           padding: 20px 20px;
         }
+        .clickable {
+          cursor: pointer;
+        }
         .mheight {
           min-height: 200px;
         }
@@ -68,6 +71,15 @@
              <div class="mheight">
               <h3>Choose your opponent: </h3>
               <div id="nameslist"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="game_screen" style="display: none;">
+        <div class="row">
+          <div class="hidden-xs col-xs-12">
+             <div class="mheight">
+              Your opponent <span id="opponent_name"></span>
             </div>
           </div>
         </div>

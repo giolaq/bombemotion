@@ -15,9 +15,13 @@ class Client {
   //name
   InputElement nameElement = querySelector("#name");
   
-  //2 parts
+  //opponent_name
+  DivElement opponentElement = querySelector("#opponent_name");
+  
+  //screens
   DivElement enterScreen = querySelector("#enter_screen");
   DivElement opponentScreen = querySelector("#opponent_screen");
+  DivElement gameScreen = querySelector("#game_screen");
   
   String playName; 
   
@@ -62,9 +66,20 @@ class Client {
       }
     });
     
+    forceClient.on("leave", (e, sender) {
+      var names = e.json;
+      for (var name in names) {
+        removePlayName(name);
+      }
+    });
+    
     forceClient.on("leaved", (e, sender) {
       removePlayName(e.json['name']);
     });
+    
+    forceClient.on("start_game", (e, sender){
+      startGame(e.json['opponent']);
+    }); 
   }
 
   void onConnected() {
@@ -103,6 +118,7 @@ class Client {
   void addPlayName(name) {
     var result = new DivElement();
     var link = new AnchorElement();
+    link.className = "clickable";
     link.innerHtml = "$name";
     result.children.add(link);
     playListElement.children.add(result);
@@ -112,12 +128,21 @@ class Client {
       
       var uid = forceClient.generateId();
       var request = {
-                     'gameId': uid,
-                     'opponent': name
+          'gameId': uid,
+          'opponent': name
       };
+      
+      startGame(name);
       
       forceClient.send("start", request );
     });
+  }
+  
+  void startGame(String name) {
+    opponentElement.innerHtml = name;
+    
+    opponentScreen.style.display = "none";
+    gameScreen.style.display= "block";
   }
   
   void removePlayName(removedName) {
