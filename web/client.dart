@@ -68,6 +68,8 @@ class Client {
     
     forceClient.on("leave", (e, sender) {
       var names = e.json;
+      print('remove names : $names');
+      
       for (var name in names) {
         removePlayName(name);
       }
@@ -146,10 +148,11 @@ class Client {
   }
   
   void removePlayName(removedName) {
-    print("$removedName will be removed");
     Element removed;
     for (Element el in playListElement.children) {
-      if (el.innerHtml == removedName) {
+      var link = el.children.first;
+      if (link.innerHtml == removedName) {
+        print("$removedName will be removed");
         removed = el;
       }
     }
