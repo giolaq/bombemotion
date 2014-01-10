@@ -21,11 +21,6 @@ void main() {
   ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, startPage: "game.html" );
   fs.register(new GameReceiver());
   
-  // game setting
-  fs.on('play', (e, sendable) {  
-    
-  });
-  
   // Profile shizzle
   List<String> playerList = new List<String>();
   fs.onProfileChanged.listen((e) {
