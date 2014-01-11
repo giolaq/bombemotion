@@ -2,15 +2,19 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:force/force_browser.dart';
+import 'package:stagexl/stagexl.dart'; 
 
 class Client {
   
   final DivElement log = new DivElement();
+  Stage stage;
+  
   DivElement statusElement = querySelector('#status');
  
   ForceClient forceClient;
  
   DivElement playListElement = querySelector("#nameslist");
+  DivElement emptyList = querySelector("#emptyList");
   
   //name
   InputElement nameElement = querySelector("#name");
@@ -138,6 +142,7 @@ class Client {
       
       forceClient.send("start", request );
     });
+    emptyList.style.display = "none";
   }
   
   void startGame(String name) {
@@ -145,6 +150,20 @@ class Client {
     
     opponentScreen.style.display = "none";
     gameScreen.style.display= "block";
+    
+    buildPlayField();
+  }
+  
+  void buildPlayField() {
+    var canvas = querySelector('#stage');
+    this.stage = new Stage('myStage', canvas);
+    var renderLoop = new RenderLoop();
+    renderLoop.addStage(stage);
+    
+    var shape = new Shape();
+    shape.graphics.circle(100, 100, 60);
+    shape.graphics.fillColor(Color.Red);
+    stage.addChild(shape);
   }
   
   void removePlayName(removedName) {
@@ -157,6 +176,9 @@ class Client {
       }
     }
     playListElement.children.remove(removed);
+    if (playListElement.children.isEmpty) {
+      emptyList.style.display = "block";
+    }
   }
 }
 
