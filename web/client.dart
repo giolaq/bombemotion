@@ -2,12 +2,16 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:force/force_browser.dart';
-import 'package:stagexl/stagexl.dart'; 
+import 'package:stagexl/stagexl.dart';
+
+import 'block_paint_object.dart';
 
 class Client {
   
   final DivElement log = new DivElement();
+  int color = Color.Red;
   Stage stage;
+  var uid = "";
   
   DivElement statusElement = querySelector('#status');
  
@@ -85,6 +89,7 @@ class Client {
     
     forceClient.on("start_game", (e, sender){
       startGame(e.json['opponent']);
+      this.uid = e.json['gameId'];
     }); 
   }
 
@@ -132,13 +137,14 @@ class Client {
     link.onClick.listen((e) {
       print('opponent of your choice $name');
       
-      var uid = forceClient.generateId();
+      this.uid = forceClient.generateId();
       var request = {
           'gameId': uid,
           'opponent': name
       };
       
       startGame(name);
+      color = Color.Blue;
       
       forceClient.send("start", request );
     });
@@ -155,15 +161,39 @@ class Client {
   }
   
   void buildPlayField() {
+    print("build play field");
     var canvas = querySelector('#stage');
     this.stage = new Stage('myStage', canvas);
     var renderLoop = new RenderLoop();
     renderLoop.addStage(stage);
     
-    var shape = new Shape();
-    shape.graphics.circle(100, 100, 60);
-    shape.graphics.fillColor(Color.Red);
-    stage.addChild(shape);
+    List<List> playlist=[[new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)],
+                         [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)],
+                         [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)]];
+    
+    /* Painting painting = new Painting();
+    stage.addChild(painting); */
+    
+    for (int r = 0; r<3; r++) {
+      for (int c = 0; c<3; c++) {
+        BlockPaint block = playlist[r][c];
+        print("what is in list for $r on $c");
+       
+        block.x = r * 100;
+        block.y = c * 100;
+        
+        block.listen().listen((e) {
+            var request = {
+                         'gameId': uid,
+                         'x': r,
+                         'y': c
+            };
+          
+            forceClient.send("play", request);
+        });
+        stage.addChild(block);
+      }
+    } 
   }
   
   void removePlayName(removedName) {
