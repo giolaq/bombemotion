@@ -32,10 +32,11 @@ class GameReceiver {
   void onGamePlay(ForceMessageEvent vme, Sender sender) {
     // String opponent = vme.json['opponent'];
     String uid = vme.json['gameId'];
+    String opponent = vme.json['opponent'];
     var x = vme.json['x'];
     var y = vme.json['y'];
     
-    
+    sender.sendToProfile('name', opponent, 'move', { 'gameId' : uid, 'x' : x, 'y' : y });
     
   }
   

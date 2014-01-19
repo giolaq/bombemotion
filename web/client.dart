@@ -12,6 +12,8 @@ class Client {
   int color = Color.Red;
   Stage stage;
   var uid = "";
+  String opponent;
+  List<List> playlist;
   
   DivElement statusElement = querySelector('#status');
  
@@ -90,7 +92,15 @@ class Client {
     forceClient.on("start_game", (e, sender){
       startGame(e.json['opponent']);
       this.uid = e.json['gameId'];
-    }); 
+    });
+    
+    forceClient.on("move", (e, sender) {
+      var x = e.json['x'];
+      var y = e.json['y'];
+      BlockPaint block = playlist[x][y];
+      
+      block.draw(Color.Blue);
+    });
   }
 
   void onConnected() {
@@ -152,6 +162,7 @@ class Client {
   }
   
   void startGame(String name) {
+    opponent = name;
     opponentElement.innerHtml = name;
     
     opponentScreen.style.display = "none";
@@ -167,9 +178,9 @@ class Client {
     var renderLoop = new RenderLoop();
     renderLoop.addStage(stage);
     
-    List<List> playlist=[[new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)],
-                         [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)],
-                         [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)]];
+    playlist= [[new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)],
+                          [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)],
+                          [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)]];
     
     /* Painting painting = new Painting();
     stage.addChild(painting); */
@@ -185,6 +196,7 @@ class Client {
         block.listen().listen((e) {
             var request = {
                          'gameId': uid,
+                         'opponent': opponent,
                          'x': r,
                          'y': c
             };
