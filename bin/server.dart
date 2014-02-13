@@ -4,7 +4,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:logging/logging.dart' show Logger, Level, LogRecord;
 import 'package:force/force_serverside.dart';
-import 'game.dart';
+import 'package:force/force_common.dart';
+
+part 'game.dart';
 
 final Logger log = new Logger('ChatApp');
 
@@ -19,7 +21,6 @@ void main() {
   var port = portEnv == null ? 8080 : int.parse(portEnv);
   
   ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, startPage: "game.html" );
-  fs.register(new GameReceiver());
   
   // Profile shizzle
   List<String> playerList = new List<String>();

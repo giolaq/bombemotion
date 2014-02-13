@@ -1,8 +1,6 @@
-library multiplayer_game_force;
+part of multiplayer_example_force;
 
-import 'package:force/force_common.dart';
-import 'package:force/force_serverside.dart';
-
+@Receivable() 
 class GameReceiver {
   
   Map<String, Game> games;
