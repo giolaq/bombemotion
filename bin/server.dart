@@ -42,9 +42,5 @@ void main() {
     sendable.sendTo(e.wsId, 'list', playerList);
   });
   
-  fs.start().then((_) {
-    fs.serve("/client.dart").listen((request) { 
-      fs.serveFile("../web/client.dart", request);
-    });
-  });
+  fs.start();
 }
