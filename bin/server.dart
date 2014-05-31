@@ -11,16 +11,16 @@ part 'game.dart';
 final Logger log = new Logger('ChatApp');
 
 void main() {
-  // Set up logger.
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((LogRecord rec) {
-    print('${rec.level.name}: ${rec.time}: ${rec.message}');
-  });
   
   var portEnv = Platform.environment['PORT'];
   var port = portEnv == null ? 8080 : int.parse(portEnv);
+  var serveClient = portEnv == null ? true : false;
+      
+  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/',
+      clientServe: serveClient, startPage: "game.html");
   
-  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, startPage: "game.html" );
+  // Setup logger
+  fs.setupConsoleLog();
   
   // Profile shizzle
   List<String> playerList = new List<String>();

@@ -12,10 +12,11 @@ class GameReceiver {
   @Receiver("start") 
   void onGameStart(ForceMessageEvent vme, Sender sender) {
     String name = vme.json['opponent'];
-    String uid = vme.json['gameId'];
+    var uid = vme.json['gameId'];
     print("start game with $name");
+    String key = "$uid";
     
-    games[uid] = new Game();
+    games[key] = new Game();
     
     sender.sendToProfile('name', name, 'start_game', { 'gameId' : uid, 'opponent' : vme.profile['name'] });
     
@@ -29,7 +30,7 @@ class GameReceiver {
   @Receiver("play") 
   void onGamePlay(ForceMessageEvent vme, Sender sender) {
     // String opponent = vme.json['opponent'];
-    String uid = vme.json['gameId'];
+    var uid = vme.json['gameId'];
     String opponent = vme.json['opponent'];
     var x = vme.json['x'];
     var y = vme.json['y'];
