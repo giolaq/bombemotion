@@ -1,6 +1,6 @@
 part of multiplayer_example_force;
 
-@Receivable() 
+@Receivable
 class GameReceiver {
   
   Map<String, Game> games;
