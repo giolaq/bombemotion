@@ -10,7 +10,7 @@ class GameReceiver {
   }
   
   @Receiver("start") 
-  void onGameStart(ForceMessageEvent vme, Sender sender) {
+  void onGameStart(MessagePackage vme, Sender sender) {
     String name = vme.json['opponent'];
     var uid = vme.json['gameId'];
     print("start game with $name");
@@ -28,7 +28,7 @@ class GameReceiver {
   }
   
   @Receiver("play") 
-  void onGamePlay(ForceMessageEvent vme, Sender sender) {
+  void onGamePlay(MessagePackage vme, Sender sender) {
     // String opponent = vme.json['opponent'];
     var uid = vme.json['gameId'];
     String opponent = vme.json['opponent'];
