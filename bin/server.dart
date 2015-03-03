@@ -42,5 +42,17 @@ void main() {
     sendable.sendTo(e.wsId, 'list', playerList);
   });
   
+  const TIMEOUT = const Duration(seconds: 1);
+  var number = 60*2;
+
+   new Timer.periodic(TIMEOUT, (Timer t) {
+     number = number - 1;
+     
+     print("send a number to the clients $number");
+     
+     var data = { "count" : "$number"};
+     fs.send("updateTime", data);
+     
+   });
   fs.start();
 }

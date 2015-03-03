@@ -33,6 +33,9 @@ class Client {
   DivElement opponentScreen = querySelector("#opponent_screen");
   DivElement gameScreen = querySelector("#game_screen");
   
+  
+  DivElement timeField = querySelector("#time");
+
   String playName; 
   
   Client() {
@@ -99,6 +102,28 @@ class Client {
       BlockPaint block = playlist[x][y];
       
       block.draw(Color.Blue);
+    });
+    
+
+    forceClient.on("updateTime", (fme, sender) {
+      timeField.innerHtml = "${fme.json["count"]}";
+      if (int.parse('${fme.json["count"]}') > 10) {
+        const TIMEOUT = const Duration(milliseconds: 500);
+        var x=1;
+           new Timer.periodic(TIMEOUT, (Timer t) {
+             var set=1;
+                 if(x==0 && set==1) {
+                   document.body.style.backgroundColor = 'red';             
+                     x=1;
+                     set=0;
+                 }
+                 if(x==1 && set==1) {
+                   document.body.style.backgroundColor = 'white';             
+                     x=0;
+                     set=0;
+                 }
+           });
+      }
     });
   }
 
