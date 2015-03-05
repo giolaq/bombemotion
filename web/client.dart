@@ -36,6 +36,7 @@ class Client {
 
   DivElement timeField = querySelector("#time");
   ButtonElement startButton = querySelector("#startButton");
+  ButtonElement launchButton = querySelector("#launchButton");
 
   String playName;
 
@@ -67,6 +68,10 @@ class Client {
       forceClient.send('start', {});
     });
 
+    launchButton.onClick.listen((e) {
+         forceClient.send('launch', {});
+       });
+    
     forceClient.onConnected.listen((e) {
       onConnected();
     });

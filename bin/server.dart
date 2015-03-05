@@ -6,6 +6,8 @@ import 'package:logging/logging.dart' show Logger, Level, LogRecord;
 import 'package:force/force_serverside.dart';
 import 'package:force/force_common.dart';
 
+import 'dart:math';
+
 part 'game.dart';
 
 final Logger log = new Logger('ChatApp');
@@ -41,7 +43,8 @@ void main() {
   startTimeout() {
     return new Timer(TIMEOUT, handleTimeout);
   }
-
+  
+ 
   // Profile shizzle
   List<String> playerList = new List<String>();
   fs.onProfileChanged.listen((e) {
@@ -61,6 +64,14 @@ void main() {
       });
     }
   });
+  
+  void assignBomb() {
+     var rng = new Random();
+     var numbersOfPlayers = playerList.length;
+     number=rng.nextInt(numbersOfPlayers);
+     print("Bomb to ${playerList.elementAt(number)}");
+   }
+
 
   fs.on('list', (e, sendable) {
     sendable.sendTo(e.wsId, 'list', playerList);
@@ -71,8 +82,14 @@ void main() {
   fs.on('start', (e, sendable) {
     print("Start");
     startTimeout();
-    sendable.sendTo(e.wsId, 'go', playerList);
+    assignBomb();
+    fs.send('go', {});
+  });
+  
 
+  fs.on('launch', (e, sendable) {
+    print("Launch");
+    assignBomb();
   });
 
   fs.start();
