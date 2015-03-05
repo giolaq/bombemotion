@@ -21,14 +21,14 @@ void main() {
   const TIMEOUT = const Duration(seconds: 1);
   var number = 60 * 2;
 
-
+  Timer timer;
 
   ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: serveClient, startPage: "game.html");
 
   // Setup logger
   fs.setupConsoleLog();
 
-  void handleTimeout() {
+  void handleTimeout(Timer t) {
     number = number - 1;
 
     print("send a number to the clients $number");
@@ -41,7 +41,7 @@ void main() {
 
 
   startTimeout() {
-    return new Timer(TIMEOUT, handleTimeout);
+    return new Timer.periodic(TIMEOUT, handleTimeout);
   }
   
  
@@ -68,8 +68,8 @@ void main() {
   void assignBomb() {
      var rng = new Random();
      var numbersOfPlayers = playerList.length;
-     number=rng.nextInt(numbersOfPlayers);
-     print("Bomb to ${playerList.elementAt(number)}");
+     var playerToBomb=rng.nextInt(numbersOfPlayers);
+     print("Bomb to ${playerList.elementAt(playerToBomb)}");
    }
 
 
@@ -81,7 +81,7 @@ void main() {
 
   fs.on('start', (e, sendable) {
     print("Start");
-    startTimeout();
+    timer = startTimeout();
     assignBomb();
     fs.send('go', {});
   });
