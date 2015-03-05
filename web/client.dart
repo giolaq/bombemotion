@@ -44,6 +44,7 @@ class Client {
     print('start force client!');
     forceClient = new ForceClient();
     forceClient.connect();
+    launchButton.hidden = true;
 
     nameElement.onChange.listen((e) {
       e.preventDefault();
@@ -69,6 +70,7 @@ class Client {
     });
 
     launchButton.onClick.listen((e) {
+         launchButton.hidden = true;
          forceClient.send('launch', {});
        });
     
@@ -87,6 +89,10 @@ class Client {
     forceClient.on("go", (e, sender) {
       goWithTheGame();
     });
+    
+    forceClient.on("bomb", (e, sender) {
+         bombed();
+       });
 
     forceClient.on("entered", (e, sender) {
       if (playName != e.json['name']) {
@@ -263,6 +269,10 @@ class Client {
     if (playListElement.children.isEmpty) {
       emptyList.style.display = "block";
     }
+  }
+  
+  void bombed() {
+    launchButton.hidden = false;
   }
 }
 

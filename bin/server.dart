@@ -12,6 +12,11 @@ part 'game.dart';
 
 final Logger log = new Logger('ChatApp');
 
+class Player {
+  String name;
+  String wsId;
+  Player(this.name, this.wsId);
+  }
 void main() {
 
   var portEnv = Platform.environment['PORT'];
@@ -46,18 +51,23 @@ void main() {
   
  
   // Profile shizzle
-  List<String> playerList = new List<String>();
+  List<Player> playerList = new List<Player>();
   fs.onProfileChanged.listen((e) {
+    String eid = e.wsId;
     String name = e.profileInfo['name'];
     if (e.type == ForceProfileType.New) {
-      playerList.add(name);
+      playerList.add(new Player(name, eid));
 
       fs.send('entered', {
         'name': name
       });
     }
     if (e.type == ForceProfileType.Removed) {
-      playerList.remove(name);
+      for ( var player in playerList) {
+        if ( player.name == name) {
+          playerList.remove(player);
+        }
+      }
 
       fs.send('leaved', {
         'name': name
@@ -69,12 +79,19 @@ void main() {
      var rng = new Random();
      var numbersOfPlayers = playerList.length;
      var playerToBomb=rng.nextInt(numbersOfPlayers);
-     print("Bomb to ${playerList.elementAt(playerToBomb)}");
+     print("Bomb to ${playerList.elementAt(playerToBomb).name}");
+     fs.sendTo(playerList.elementAt(playerToBomb).wsId, 'bomb', {});
+
    }
 
 
   fs.on('list', (e, sendable) {
-    sendable.sendTo(e.wsId, 'list', playerList);
+    //Hack to refactor
+    List<String> plays = new List<String>();
+    for ( var player in playerList) {
+      plays.add(player.name);
+    }
+    sendable.sendTo(e.wsId, 'list', plays);
   });
 
 
