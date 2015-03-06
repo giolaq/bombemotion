@@ -6,6 +6,8 @@ import 'package:stagexl/stagexl.dart';
 
 import 'block_paint_object.dart';
 
+import 'dart:convert' show HtmlEscape;
+
 class Client {
 
   final DivElement log = new DivElement();
@@ -26,7 +28,7 @@ class Client {
   InputElement nameElement = querySelector("#name");
 
   //opponent_name
-  DivElement opponentElement = querySelector("#opponent_name");
+  SpanElement opponentElement = querySelector("#opponent_name");
 
   //screens
   DivElement enterScreen = querySelector("#enter_screen");
@@ -37,14 +39,69 @@ class Client {
   DivElement timeField = querySelector("#time");
   ButtonElement startButton = querySelector("#startButton");
   ButtonElement launchButton = querySelector("#launchButton");
+  InputElement imageInput = querySelector("#cameraInput");
+  OutputElement _output = querySelector('#list');
 
   String playName;
+  HtmlEscape sanitizer = new HtmlEscape();
 
   Client() {
     print('start force client!');
     forceClient = new ForceClient();
     forceClient.connect();
     launchButton.hidden = true;
+
+    
+
+ 
+
+  void _onFilesSelected(List<File> files) {
+    _output.nodes.clear();
+    var list = new Element.tag('ul');
+    for (var file in files) {
+      var item = new Element.tag('li');
+
+      // If the file is an image, read and display its thumbnail.
+      if (file.type.startsWith('image')) {
+        var thumbHolder = new Element.tag('span');
+        var reader = new FileReader();
+        reader.onLoad.listen((e) {
+          var thumbnail = new ImageElement(src: reader.result);
+          thumbnail.classes.add('thumb');
+          thumbnail.title = sanitizer.convert(file.name);
+          thumbHolder.nodes.add(thumbnail);
+        });
+        reader.readAsDataUrl(file);
+        item.nodes.add(thumbHolder);
+      }
+
+      // For all file types, display some properties.
+      var properties = new Element.tag('span');
+      properties.innerHtml = (new StringBuffer('<strong>')
+          ..write(sanitizer.convert(file.name))
+          ..write('</strong> (')
+          ..write(file.type != null ? sanitizer.convert(file.type) : 'n/a')
+          ..write(') ')
+          ..write(file.size)
+          ..write(' bytes')
+          // TODO(jason9t): Re-enable this when issue 5070 is resolved.
+          // http://code.google.com/p/dart/issues/detail?id=5070
+          // ..add(', last modified: ')
+          // ..add(file.lastModifiedDate != null ?
+          //       file.lastModifiedDate.toLocal().toString() :
+          //       'n/a')
+      ).toString();
+      item.nodes.add(properties);
+      list.nodes.add(item);
+    }
+    _output.nodes.add(list);
+  }
+  
+  void _onFileInputChange() {
+     _onFilesSelected(imageInput.files);
+   }
+  
+    imageInput.onChange.listen((e) => _onFileInputChange());
 
     nameElement.onChange.listen((e) {
       e.preventDefault();
