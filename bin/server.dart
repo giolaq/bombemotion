@@ -63,12 +63,9 @@ void main() {
       });
     }
     if (e.type == ForceProfileType.Removed) {
-      for ( var player in playerList) {
-        if ( player.name == name) {
-          playerList.remove(player);
-        }
-      }
-
+      playerList.removeWhere( (Player p ) => p.name == name);
+      print('removed $name in $playerList' );
+      
       fs.send('leaved', {
         'name': name
       });
