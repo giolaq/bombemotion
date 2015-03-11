@@ -7,6 +7,7 @@ import 'package:force/force_serverside.dart';
 import 'package:force/force_common.dart';
 
 import 'dart:math';
+import 'package:appengine/appengine.dart';
 
 part 'game.dart';
 
@@ -29,6 +30,8 @@ void main() {
   Timer timer;
 
   ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: serveClient, startPage: "game.html");
+
+  runAppEngine(fs.requestHandler).then((_) {
 
   // Setup logger
   fs.setupConsoleLog();
@@ -106,5 +109,7 @@ void main() {
     assignBomb();
   });
 
-  fs.start();
+  //fs.start();
+  });
+
 }

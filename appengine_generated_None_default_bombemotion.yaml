@@ -1,0 +1,12 @@
+api_version: '1'
+builtins:
+- default: 'on'
+handlers:
+- script: PLACEHOLDER
+  url: .*
+runtime: vm
+version: bombemotion
+vm: true
+vm_settings:
+  has_docker_image: 'True'
+  vm_runtime: custom
