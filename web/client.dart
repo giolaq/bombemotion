@@ -26,7 +26,7 @@ class Client {
   InputElement nameElement = querySelector("#name");
   
   //opponent_name
-  DivElement opponentElement = querySelector("#opponent_name");
+  SpanElement opponentElement = querySelector("#opponent_name");
   
   //screens
   DivElement enterScreen = querySelector("#enter_screen");
