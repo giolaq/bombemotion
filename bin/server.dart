@@ -28,7 +28,7 @@ void main() {
 
   Timer timer;
 
-  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: serveClient, startPage: "game.html");
+  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: true);
 
   // Setup logger
   fs.setupConsoleLog();
@@ -106,5 +106,8 @@ void main() {
     assignBomb();
   });
 
-  fs.start();
-}
+  fs.start().then((_) {
+   // Tell Force what the start page is!
+     fs.server.static("/", "game.html");
+   });
+  }
