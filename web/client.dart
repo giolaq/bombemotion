@@ -57,6 +57,10 @@ class Client {
     
     nameElement.focus();
     
+    forceClient.onMessage.listen((e) {
+      onMessage(e.request, e.json);
+    });
+    
     forceClient.onConnected.listen((e) {
       onConnected();
     });
@@ -105,10 +109,6 @@ class Client {
   void onConnected() {
     setStatus('');
     nameElement.disabled = false;
-    
-    forceClient.onMessage.listen((e) {
-      onMessage(e.request, e.json);
-    });
   }
 
   void onDisconnected() {
