@@ -17,7 +17,7 @@ void main() {
   var serveClient = portEnv == null ? true : false;
       
   ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/',
-      clientServe: serveClient, startPage: "game.html");
+      clientServe: true);
   
   // Setup logger
   fs.setupConsoleLog();
@@ -42,5 +42,8 @@ void main() {
     sendable.sendTo(e.wsId, 'list', playerList);
   });
   
-  fs.start();
+  fs.start().then((_) {
+    // Tell Force what the start page is!
+    fs.server.static("/", "game.html");
+  });
 }
