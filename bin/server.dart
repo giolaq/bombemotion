@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:logging/logging.dart' show Logger, Level, LogRecord;
 import 'package:force/force_serverside.dart';
-import 'package:force/force_common.dart';
 
 import 'dart:math';
 
@@ -29,6 +28,7 @@ void main() {
   Timer timer;
 
   ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: true);
+
 
   // Setup logger
   fs.setupConsoleLog();

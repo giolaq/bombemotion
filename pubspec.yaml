@@ -1,9 +1,6 @@
 name: forcetictactoe
 description: An example with dart force
 dependencies:
-  http: '>=0.9.0 <0.10.0'
-  http_server: '>=0.9.0 <0.10.0'
-  logging: '>=0.9.0 <0.10.0'
   stagexl: '0.8.9'
   force: 
     git: git://github.com/ForceUniverse/dart-force.git 
