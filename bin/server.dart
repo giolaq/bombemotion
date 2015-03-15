@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:logging/logging.dart' show Logger, Level, LogRecord;
 import 'package:force/force_serverside.dart';
-import 'package:force/force_common.dart';
 
 import 'dart:math';
 import 'package:appengine/appengine.dart';
@@ -29,7 +28,8 @@ void main() {
 
   Timer timer;
 
-  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: serveClient, startPage: "game.html");
+  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: true);
+
 
   runAppEngine(fs.requestHandler).then((_) {
 
@@ -113,3 +113,4 @@ void main() {
   });
 
 }
+

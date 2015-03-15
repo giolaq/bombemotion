@@ -131,6 +131,10 @@ class Client {
          forceClient.send('launch', {});
        });
     
+    forceClient.onMessage.listen((e) {
+      onMessage(e.request, e.json);
+    });
+    
     forceClient.onConnected.listen((e) {
       onConnected();
     });
@@ -210,9 +214,6 @@ class Client {
     setStatus('');
     nameElement.disabled = false;
 
-    forceClient.onMessage.listen((e) {
-      onMessage(e.request, e.json);
-    });
   }
 
   void onDisconnected() {
