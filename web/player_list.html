@@ -1,0 +1,44 @@
+<link rel="import" href="packages/polymer/polymer.html">
+<link href="packages/core_elements/core_animated_pages.html" rel="import">
+
+  <polymer-element name="player-list">
+  <template>
+
+    <style>
+      p {
+        margin: 8px;
+      }
+
+      .item {
+        background: #e7e7e7;
+        padding: 16px;
+        margin: 8px;
+        border-radius: 3px;
+        box-sizing: border-box;
+        position: relative;
+      }
+    </style>
+
+    <p>Client status {{status}}</p>
+
+    <core-animated-pages id="pages" on-tap="{{reorder}}" selected="{{selected}}" on-core-animated-pages-transition-end="{{done}}" transitions="hero-transition">
+
+      <section>
+        <template repeat="{{items}}">
+          <div hero-id="{{h}}" hero class="item">{{v}}</div>
+        </template>
+      </section>
+
+      <section>
+        <template repeat="{{items2}}">
+          <div hero-id="{{h}}" hero class="item">{{v}}</div>
+        </template>
+      </section>
+
+    </core-animated-pages>
+
+  </template>
+  <script type="application/dart" src="player_list.dart"></script>
+
+
+  </polymer-element>

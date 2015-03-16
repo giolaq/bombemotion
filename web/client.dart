@@ -283,7 +283,7 @@ class Client {
   void buildPlayField() {
     print("build play field");
     var canvas = querySelector('#stage');
-    this.stage = new Stage('myStage', canvas);
+    this.stage = new Stage(canvas);
     var renderLoop = new RenderLoop();
     renderLoop.addStage(stage);
 

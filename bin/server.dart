@@ -15,7 +15,7 @@ class Player {
   String name;
   String wsId;
   Player(this.name, this.wsId);
-  }
+}
 void main() {
 
   var portEnv = Platform.environment['PORT'];
@@ -40,12 +40,12 @@ void main() {
     var data = {
       "count": "$number"
     };
-    if ( number == 0 ) {
+    if (number == 0) {
       print("Game Over");
       timer.cancel();
       fs.send("gameover", data);
-    } else
-    {    print("send a number to the clients $number");
+    } else {
+      print("send a number to the clients $number");
 
       fs.send("updateTime", data);
     }
@@ -55,48 +55,57 @@ void main() {
   startTimeout() {
     return new Timer.periodic(TIMEOUT, handleTimeout);
   }
-  
- 
+
+  Player tabler;
+
   // Profile shizzle
   List<Player> playerList = new List<Player>();
   fs.onProfileChanged.listen((e) {
     String eid = e.wsId;
     String name = e.profileInfo['name'];
-    if (e.type == ForceProfileType.New) {
-      playerList.add(new Player(name, eid));
 
-      fs.send('entered', {
-        'name': name
-      });
+    if (e.type == ForceProfileType.New) {
+        playerList.add(new Player(name, eid));
+
+        fs.send('entered', {
+          'name': name
+        });
+      
     }
     if (e.type == ForceProfileType.Removed) {
-      playerList.removeWhere( (Player p ) => p.name == name);
-      print('removed $name in $playerList' );
-      
+      playerList.removeWhere((Player p) => p.name == name);
+      print('removed $name in $playerList');
+
       fs.send('leaved', {
         'name': name
       });
     }
   });
-  
-  void assignBomb() {
-     var rng = new Random();
-     var numbersOfPlayers = playerList.length;
-     var playerToBomb=rng.nextInt(numbersOfPlayers);
-     print("Bomb to ${playerList.elementAt(playerToBomb).name}");
-     fs.sendTo(playerList.elementAt(playerToBomb).wsId, 'bomb', {});
 
-   }
+  void assignBomb() {
+    var rng = new Random();
+    var numbersOfPlayers = playerList.length;
+    var playerToBomb = rng.nextInt(numbersOfPlayers);
+    print("Bomb to ${playerList.elementAt(playerToBomb).name}");
+    fs.sendTo(playerList.elementAt(playerToBomb).wsId, 'bomb', {});
+    fs.sendTo(tabler.wsId, 'bomb', {
+      'name': playerList.elementAt(playerToBomb).name
+    });
+  }
 
 
   fs.on('list', (e, sendable) {
     //Hack to refactor
     List<String> plays = new List<String>();
-    for ( var player in playerList) {
+    for (var player in playerList) {
       plays.add(player.name);
     }
     sendable.sendTo(e.wsId, 'list', plays);
   });
+
+  fs.on('table', (e, sendable) {
+     tabler = new Player('tabler', e.wsId);
+    });
 
 
 
@@ -106,7 +115,7 @@ void main() {
     assignBomb();
     fs.send('go', {});
   });
-  
+
 
   fs.on('launch', (e, sendable) {
     print("Launch");
@@ -114,7 +123,7 @@ void main() {
   });
 
   fs.start().then((_) {
-   // Tell Force what the start page is!
-     fs.server.static("/", "game.html");
-   });
-  }
+    // Tell Force what the start page is!
+    fs.server.static("/", "game.html");
+  });
+}

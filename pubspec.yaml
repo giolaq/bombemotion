@@ -1,7 +1,14 @@
 name: forcetictactoe
 description: An example with dart force
 dependencies:
-  stagexl: '0.8.9'
+  stagexl: '0.10.3'
   force: 
     git: git://github.com/ForceUniverse/dart-force.git 
+  polymer: ">=0.15.2 <0.17.0"
+  core_elements: ">=0.5.0 <0.7.0"
+  paper_elements: ">=0.6.0 <0.7.0"
+transformers:
+- polymer:
+    entry_points:
+    - web/table.html
   
