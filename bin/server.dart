@@ -23,7 +23,7 @@ void main() {
   var serveClient = portEnv == null ? true : false;
 
   const TIMEOUT = const Duration(seconds: 1);
-  var number = 60 * 2;
+  var number = 10 * 2;
 
   Timer timer;
 
@@ -36,12 +36,19 @@ void main() {
   void handleTimeout(Timer t) {
     number = number - 1;
 
-    print("send a number to the clients $number");
 
     var data = {
       "count": "$number"
     };
-    fs.send("updateTime", data);
+    if ( number == 0 ) {
+      print("Game Over");
+      timer.cancel();
+      fs.send("gameover", data);
+    } else
+    {    print("send a number to the clients $number");
+
+      fs.send("updateTime", data);
+    }
   }
 
 

@@ -41,6 +41,7 @@ class Client {
   ButtonElement launchButton = querySelector("#launchButton");
   InputElement imageInput = querySelector("#cameraInput");
   OutputElement _output = querySelector('#list');
+  DivElement gameOverElement = querySelector('#gameover');
 
   String playName;
   HtmlEscape sanitizer = new HtmlEscape();
@@ -186,6 +187,10 @@ class Client {
 
       block.draw(Color.Blue);
     });
+    
+    forceClient.on("gameover", (e, sender) {
+        gameOver();
+      });
 
 
     forceClient.on("updateTime", (fme, sender) {
@@ -331,6 +336,15 @@ class Client {
   
   void bombed() {
     launchButton.hidden = false;
+  }
+  
+  void gameOver(){
+    if ( launchButton.hidden == false ) {
+      TextAreaElement textEl = new TextAreaElement();
+      textEl.text = "GAME OVER";
+      gameOverElement.children.add(textEl);
+      launchButton.hidden = true;
+    }
   }
 }
 
