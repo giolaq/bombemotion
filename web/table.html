@@ -3,11 +3,56 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- Bootstrap -->
+      <link href="bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="css/font-awesome.min.css" rel="stylesheet" media="screen">
+      <link href="css/bootflat.css" rel="stylesheet" media="screen">
+      <link href="css/bootflat-extensions.css" rel="stylesheet" media="screen">
+      <link href="css/bootflat-square.css" rel="stylesheet" media="screen">
+      <style>
+        body {
+          color: #333;
+          background: #eee;
+        }
+        #context-wrapper {
+          min-height: 400px;
+        }
+        #context {
+          position: absolute;
+          bottom: 0;
+        }
+        .box {
+          border: 1px solid #d8d8d8;
+          -moz-border-radius: 3px;
+          -webkit-border-radius: 3px;
+          border-radius: 3px;
+          background-color: #fff;
+          border-bottom-width: 2px;
+          margin: 10px 0 20px 0;
+          padding: 20px 20px;
+        }
+        .clickable {
+          cursor: pointer;
+        }
+        .mheight {
+          min-height: 200px;
+        }
+        .small {
+          font-size: 10pt;
+          color: #aaa;
+        }
+        output {
+       display: block;
+        }
+        
+      </style>
     <title>Player List</title>
     <link rel="import" href="player_list.html">
   </head>
   <body>
     <h1>Player List</h1>
+    <button id="startButton" type="button">Start!</button>
     <div id="status"></div>
     <player-list></player-list>
     <script type="application/dart">export 'package:polymer/init.dart';</script>

@@ -37,7 +37,6 @@ class Client {
 
 
   DivElement timeField = querySelector("#time");
-  ButtonElement startButton = querySelector("#startButton");
   ButtonElement launchButton = querySelector("#launchButton");
   InputElement imageInput = querySelector("#cameraInput");
   OutputElement _output = querySelector('#list');
@@ -123,9 +122,7 @@ class Client {
 
     nameElement.focus();
 
-    startButton.onClick.listen((e) {
-      forceClient.send('start', {});
-    });
+   
 
     launchButton.onClick.listen((e) {
          launchButton.hidden = true;
@@ -149,7 +146,7 @@ class Client {
     });
 
     forceClient.on("go", (e, sender) {
-      goWithTheGame();
+     // goWithTheGame();
     });
     
     forceClient.on("bomb", (e, sender) {
@@ -313,10 +310,6 @@ class Client {
         stage.addChild(block);
       }
     }
-  }
-  
-  void goWithTheGame() {
-    startButton.hidden = true;
   }
   
   void removePlayName(removedName) {
