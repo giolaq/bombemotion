@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bombemotion</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent" >
+  <meta name="format-detection" content="telephone=no">
+  <meta name="application-name" content="Bombemotion Challenge">
+
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="icon" sizes="196x196" href="icons/icon-196.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/iPad@2x.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="icons/Icon-72@2x.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="icons/iPhone@2x.png">
+
+  <!-- add Roboto font -->
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+  <!-- import the bombemotion-app component -->
+  <link rel="import" href="bombemotion_app.html">
+
+  <!-- install firebase.js -->
+  <script src="https://cdn.firebase.com/js/client/1.1.2/firebase.js"></script>
+
+  <!-- Start the application -->
+  <script type="application/dart">export 'package:polymer/init.dart';</script>
+
+  <!-- Workaround for styling -->
+  <style shim-shadowdom>
+    html /deep/ paper-action-dialog {
+      font-family: "Roboto",Helvetica,Arial,sans-serif;
+    }
+    html /deep/ .avatar {
+      border-radius: 50%;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body fullbleed unresolved>
+   <bombemotion-app></bombemotion-app>
+</body>
+</html>
+
