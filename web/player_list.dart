@@ -67,7 +67,11 @@ class ListDemo extends PolymerElement {
   
   void bomb(name) {
     Person bombedPerson = this.items.firstWhere( (Person p) => p.v == name);
+    num previousIndex = this.items.indexOf(bombedPerson);
+    
     this.items.insert(0, bombedPerson);
+    this.items2.insert(0, bombedPerson);
+
   }
 
   void onConnected() {
