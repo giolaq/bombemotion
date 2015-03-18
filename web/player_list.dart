@@ -4,11 +4,16 @@ import 'package:template_binding/template_binding.dart';
 
 import 'package:force/force_browser.dart';
 
+import 'dart:html';
+
 class Person {
   final String h;
   final String v;
   Person({this.h, this.v});
 }
+
+ButtonElement startButton = querySelector("#startButton");
+
 
 @CustomTag('player-list')
 class ListDemo extends PolymerElement {
@@ -19,7 +24,10 @@ class ListDemo extends PolymerElement {
     forceClient.connect();
 
 
-    
+    startButton.onClick.listen((e) {
+          forceClient.send('start', {});
+        });
+
     forceClient.on("entered", (e, sender) {
       addPlayName(e.json['name']);
     });
@@ -59,7 +67,11 @@ class ListDemo extends PolymerElement {
   
   void bomb(name) {
     Person bombedPerson = this.items.firstWhere( (Person p) => p.v == name);
+    num previousIndex = this.items.indexOf(bombedPerson);
+    
     this.items.insert(0, bombedPerson);
+    this.items2.insert(0, bombedPerson);
+
   }
 
   void onConnected() {
