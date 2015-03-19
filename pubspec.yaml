@@ -4,9 +4,10 @@ dependencies:
   stagexl: '0.10.3'
   force: 
     git: git://github.com/ForceUniverse/dart-force.git 
-  polymer: ">=0.15.2 <0.17.0"
-  core_elements: ">=0.5.0 <0.7.0"
-  paper_elements: ">=0.6.0 <0.7.0"
+  polymer: any
+  core_elements: any
+  paper_elements: any
+  firebase: any
 transformers:
 - polymer:
     entry_points:

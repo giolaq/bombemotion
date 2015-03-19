@@ -8,6 +8,7 @@
 <link rel="import" href="../../packages/core_elements/core_media_query.html">
 
 <!-- import chess-challenge elements-->
+<link rel="import" href="bombemotion_board.html">
 <link rel="import" href="bombemotion_login.html">
 
 <polymer-element fit name="bombemotion-app" attributes="user" vertical layout>
@@ -22,6 +23,7 @@
 
     <core-animated-pages selected="{{selected}}" flex>
       <bombemotion-login id="login" name="login" user="{{user}}" wide="{{wide}}"></bombemotion-login>
+      <bombemotion-board id="board" name="board" user="{{user}}"></bombemotion-board>
     </core-animated-pages>
 
     <core-media-query query="min-width: 900px" queryMatches="{{wide}}"></core-media-query>

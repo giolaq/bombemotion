@@ -16,6 +16,7 @@ class BombemotionApp extends PolymerElement {
 
   void selectedChanged(String oldValue, String newValue) {
     if (selected == 'board') {
+      print("board selected");
       async((_) => $['board'].resize());
     }
   }
