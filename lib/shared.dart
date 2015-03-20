@@ -1,4 +1,9 @@
+library shared;
+
 import 'dart:convert';
+import 'package:force/force_browser.dart';
+
+part 'bombemotion_client.dart';
 
 const firebaseUrl = 'https://bombemotion.firebaseio.com/';
 

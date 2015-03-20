@@ -9,11 +9,13 @@ import 'package:firebase/firebase.dart' show Firebase;
 
 
 import 'package:stagexl/stagexl.dart' as StageXL;
+
+
 /**
  * The Bombemotion Board component
  */
 @CustomTag('bombemotion-board')
-class BombemotionBoard extends PolymerElement {
+class BombemotionBoard extends PolymerElement with Client{
   @published User user;
 
   @observable List<User> leaderBoard = toObservable([]);
@@ -44,13 +46,16 @@ class BombemotionBoard extends PolymerElement {
 
   WebSocket _webSocket;
 
-  BombemotionBoard.created() : super.created();
+  CanvasElement canvas;
+  
+  BombemotionBoard.created() : super.created() {
+     onConnect("anonymous");
+  }
   
   
   Random random = new Random();
   StageXL.Stage stage;
   StageXL.RenderLoop renderLoop;
-
 
   @override
   void domReady() {
@@ -68,14 +73,25 @@ class BombemotionBoard extends PolymerElement {
   }
 
   void userChanged(User oldValue, User newValue) {
+    playName = newValue.name;
+    sendProfile();
     _connect();
     _connectFirebase();
   }
 
 
   void _connect() {
-    Uri uri = Uri.parse(window.location.href);
-    var port = uri.port != 8080 ? 80 : 9090;
+    
+      canvas = this.shadowRoot.querySelector('#stage');
+      stage = new StageXL.Stage(canvas, webGL: true, width:800, height: 600);
+      stage.scaleMode = StageXL.StageScaleMode.SHOW_ALL;
+      stage.align = StageXL.StageAlign.NONE;
+
+      renderLoop = new StageXL.RenderLoop();
+      renderLoop.addStage(stage);
+      
+    //Uri uri = Uri.parse(window.location.href);
+    //var port = uri.port != 8080 ? 80 : 9090;
     stagexl();
     
    /* _webSocket = new WebSocket('ws://${uri.host}:${port}/ws')
@@ -296,17 +312,22 @@ class BombemotionBoard extends PolymerElement {
   
 void stagexl() {
 
-  CanvasElement canvas = this.shadowRoot.querySelector('#stage');
-  stage = new StageXL.Stage(canvas, webGL: true, width:800, height: 600);
-  stage.scaleMode = StageXL.StageScaleMode.SHOW_ALL;
-  stage.align = StageXL.StageAlign.NONE;
-
-  renderLoop = new StageXL.RenderLoop();
-  renderLoop.addStage(stage);
-
+  stage.mouseEnabled = false;
+  stage.juggler.clear();
+  stage.removeChildren();
   StageXL.BitmapData.load("img/logo.png").then(startAnimation);
 }
   
+void drawBomb() {
+   stage.mouseEnabled = true;
+
+   stage.juggler.clear();
+   stage.removeChildren();
+   stage.onMouseClick.listen(throwBomb);
+
+
+   StageXL.BitmapData.load("img/bomb.png").then(startAnimation);
+}
 
 void startAnimation(StageXL.BitmapData logoBitmapData) {
 
@@ -332,10 +353,23 @@ void startAnimation(StageXL.BitmapData logoBitmapData) {
   stage.juggler.tween(logoBitmap, 1.0, StageXL.TransitionFunction.easeInBack)
     ..delay = 1.5
     ..animate.scaleX.to(0.0)
-    ..animate.scaleY.to(0.0)
-    ..onComplete = logoBitmap.removeFromParent;
+    ..animate.scaleY.to(0.0);
+   // ..onComplete = logoBitmap.removeFromParent;
 
-  stage.juggler.delayCall(() => startAnimation(logoBitmapData), 0.1);
+  //stage.juggler.delayCall(() => startAnimation(logoBitmapData), 0.1);
 }
+
+  bombed() {
+    drawBomb();
+  }
+  
+  saved() {
+    stagexl();
+  }
+  
+  void throwBomb(StageXL.Event ev){
+    saved();
+    launch();
+  }
 
 }
