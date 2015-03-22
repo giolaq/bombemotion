@@ -12,6 +12,7 @@ abstract class Client {
 
  
   String playName;
+  bool hasBomb = false;
 
   void onConnect(String name) {
     playName = name;
@@ -41,6 +42,7 @@ abstract class Client {
     });
     
     forceClient.on("bomb", (e, sender) {
+         hasBomb = true;
          bombed();
        });
 
@@ -133,16 +135,19 @@ abstract class Client {
   
   void saved();
   
+  void die();
+  
+  void survive();
+  
   void launch() {
     forceClient.send('launch', {});
   }
   
   void gameOver(){
-   /* if ( launchButton.hidden == false ) {
-      TextAreaElement textEl = new TextAreaElement();
-      textEl.text = "GAME OVER";
-      gameOverElement.children.add(textEl);
-      launchButton.hidden = true;
-    }*/
+     if ( hasBomb ) {
+       die();
+     } else {
+       survive();
+     }
   }
 }

@@ -312,14 +312,14 @@ class BombemotionBoard extends PolymerElement with Client{
   
 void stagexl() {
 
-  stage.mouseEnabled = false;
+  stage.mouseChildren = false;
   stage.juggler.clear();
   stage.removeChildren();
   StageXL.BitmapData.load("img/logo.png").then(startAnimation);
 }
   
 void drawBomb() {
-   stage.mouseEnabled = true;
+  stage.mouseChildren = true;
 
    stage.juggler.clear();
    stage.removeChildren();
@@ -353,8 +353,8 @@ void startAnimation(StageXL.BitmapData logoBitmapData) {
   stage.juggler.tween(logoBitmap, 1.0, StageXL.TransitionFunction.easeInBack)
     ..delay = 1.5
     ..animate.scaleX.to(0.0)
-    ..animate.scaleY.to(0.0);
-   // ..onComplete = logoBitmap.removeFromParent;
+    ..animate.scaleY.to(0.0)
+    ..onComplete = () => startAnimation(logoBitmapData);
 
   //stage.juggler.delayCall(() => startAnimation(logoBitmapData), 0.1);
 }
@@ -364,7 +364,37 @@ void startAnimation(StageXL.BitmapData logoBitmapData) {
   }
   
   saved() {
+    hasBomb = false;
     stagexl();
+  }
+  
+  
+  die() {
+    stage.mouseChildren = false;
+     stage.juggler.clear();
+     stage.removeChildren();
+     
+     var textField = new StageXL.TextField();
+       textField.defaultTextFormat = new StageXL.TextFormat("Arial", 36, StageXL.Color.Black, align: StageXL.TextFormatAlign.CENTER);
+       textField.width = 400;
+       textField.x = stage.contentRectangle.center.x - 200;
+       textField.y = stage.contentRectangle.center.y - 20;
+       textField.text = "Game OVER!";
+       textField.addTo(stage);
+  }
+  
+  survive() {
+    stage.mouseChildren = false;
+     stage.juggler.clear();
+     stage.removeChildren();
+     
+     var textField = new StageXL.TextField();
+        textField.defaultTextFormat = new StageXL.TextFormat("Arial", 36, StageXL.Color.Black, align: StageXL.TextFormatAlign.CENTER);
+        textField.width = 400;
+        textField.x = stage.contentRectangle.center.x - 200;
+        textField.y = stage.contentRectangle.center.y - 20;
+        textField.text = "You Survived";
+        textField.addTo(stage);
   }
   
   void throwBomb(StageXL.Event ev){
