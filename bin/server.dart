@@ -23,7 +23,7 @@ void main() {
   var serveClient = portEnv == null ? true : false;
 
   const TIMEOUT = const Duration(seconds: 1);
-  var number = 10 * 2;
+  var number = 30 * 2;
 
   Timer timer;
 
@@ -56,31 +56,10 @@ void main() {
     return new Timer.periodic(TIMEOUT, handleTimeout);
   }
 
-  Player tabler;
 
   // Profile shizzle
   List<Player> playerList = new List<Player>();
-  fs.onProfileChanged.listen((e) {
-    String eid = e.wsId;
-    String name = e.profileInfo['name'];
-
-    if (e.type == ForceProfileType.New) {
-        playerList.add(new Player(name, eid));
-
-        fs.send('entered', {
-          'name': name
-        });
-      
-    }
-    if (e.type == ForceProfileType.Removed) {
-      playerList.removeWhere((Player p) => p.name == name);
-      print('removed $name in $playerList');
-
-      fs.send('leaved', {
-        'name': name
-      });
-    }
-  });
+  Player tabler;
 
   void assignBomb() {
     var rng = new Random();
@@ -93,6 +72,33 @@ void main() {
     });
   }
 
+  fs.onProfileChanged.listen((e) {
+    String eid = e.wsId;
+    String name = e.profileInfo['name'];
+
+    if (e.type == ForceProfileType.New) {
+      playerList.add(new Player(name, eid));
+
+      fs.send('entered', {
+        'name': name
+      });
+
+    }
+    if (e.type == ForceProfileType.Removed) {
+      playerList.removeWhere((Player p) => p.name == name);
+      print('removed $name in $playerList');
+
+      fs.send('leaved', {
+        'name': name
+      });
+      print("Reassign bomb");
+      if (playerList.length > 0) {
+        assignBomb();
+      }
+    }
+  });
+
+
 
   fs.on('list', (e, sendable) {
     //Hack to refactor
@@ -104,8 +110,8 @@ void main() {
   });
 
   fs.on('table', (e, sendable) {
-     tabler = new Player('tabler', e.wsId);
-    });
+    tabler = new Player('tabler', e.wsId);
+  });
 
 
 
