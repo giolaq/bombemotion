@@ -13,6 +13,7 @@ abstract class Client {
  
   String playName;
   bool hasBomb = false;
+  num count = 0;
 
   void onConnect(String name) {
     playName = name;
@@ -40,6 +41,7 @@ abstract class Client {
     forceClient.on("go", (e, sender) {
      // goWithTheGame();
     });
+    
     
     forceClient.on("bomb", (e, sender) {
          hasBomb = true;
@@ -75,26 +77,6 @@ abstract class Client {
       });
 
 
-    forceClient.on("updateTime", (fme, sender) {
-    /*  timeField.innerHtml = "${fme.json["count"]}";
-      if (int.parse('${fme.json["count"]}') > 10) {
-        const TIMEOUT = const Duration(milliseconds: 500);
-        var x = 1;
-        new Timer.periodic(TIMEOUT, (Timer t) {
-          var set = 1;
-          if (x == 0 && set == 1) {
-            document.body.style.backgroundColor = 'red';
-            x = 1;
-            set = 0;
-          }
-          if (x == 1 && set == 1) {
-            document.body.style.backgroundColor = 'white';
-            x = 0;
-            set = 0;
-          }
-        });
-      }*/
-    });
   }
 
   void onConnected() {
@@ -138,12 +120,22 @@ abstract class Client {
   void die();
   
   void survive();
-  
+    
   void launch() {
-    forceClient.send('launch', {});
+    if ( hasBomb ) {
+      count = count + 1;
+      print("launc $count");
+      if ( count == 3 ) {
+           forceClient.send('launch', {});
+           count = 0;
+           saved();
+         }
+    }
+  
   }
   
   void gameOver(){
+     print ("game over");
      if ( hasBomb ) {
        die();
      } else {

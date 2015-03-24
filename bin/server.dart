@@ -121,8 +121,12 @@ void main() {
     assignBomb();
     fs.send('go', {});
   });
-
-
+  
+  fs.on('stop', (e, sendable) {
+    print("Stop");
+    fs.send('gameover', {});
+  });
+  
   fs.on('launch', (e, sendable) {
     print("Launch");
     assignBomb();
@@ -130,6 +134,6 @@ void main() {
 
   fs.start().then((_) {
     // Tell Force what the start page is!
-    fs.server.static("/", "game.html");
+    fs.server.static("/", "index.html");
   });
 }

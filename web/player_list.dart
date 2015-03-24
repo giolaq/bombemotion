@@ -13,11 +13,14 @@ class Person {
 }
 
 ButtonElement startButton = querySelector("#startButton");
+ButtonElement stopButton = querySelector("#stopButton");
 
 
 @CustomTag('player-list')
 class ListDemo extends PolymerElement {
   ForceClient forceClient;
+
+  @published String time;
 
   ListDemo.created() : super.created() {
     forceClient = new ForceClient();
@@ -25,28 +28,37 @@ class ListDemo extends PolymerElement {
 
 
     startButton.onClick.listen((e) {
-          forceClient.send('start', {});
-        });
+      forceClient.send('start', {});
+    });
+
+
+    stopButton.onClick.listen((e) {
+      forceClient.send('stop', {});
+    });
 
     forceClient.on("entered", (e, sender) {
       addPlayName(e.json['name']);
     });
-    
-    forceClient.on("bomb", (e, sender) {
-        bomb(e.json['name']);
-      });
-    
-    forceClient.onConnected.listen((e) {
-       onConnected();
-     });
 
-     forceClient.onDisconnected.listen((e) {
-       onDisconnected();
-     });
-     
-     forceClient.onMessage.listen((e) {
-       onMessage(e.request, e.json);
-     });
+    forceClient.on("bomb", (e, sender) {
+      bomb(e.json['name']);
+    });
+
+
+    forceClient.on("updateTime", (fme, sender) {
+       time = "${fme.json["count"]}";
+    });
+    forceClient.onConnected.listen((e) {
+      onConnected();
+    });
+
+    forceClient.onDisconnected.listen((e) {
+      onDisconnected();
+    });
+
+    forceClient.onMessage.listen((e) {
+      onMessage(e.request, e.json);
+    });
   }
 
   @observable String status = 'status';
@@ -64,11 +76,11 @@ class ListDemo extends PolymerElement {
     this.items2.insert(0, new Person(h: 'player', v: name));
 
   }
-  
+
   void bomb(name) {
-    Person bombedPerson = this.items.firstWhere( (Person p) => p.v == name);
+    Person bombedPerson = this.items.firstWhere((Person p) => p.v == name);
     num previousIndex = this.items.indexOf(bombedPerson);
-    
+
     this.items.insert(0, bombedPerson);
     this.items2.insert(0, bombedPerson);
 

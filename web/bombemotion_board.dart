@@ -1,4 +1,3 @@
-
 import 'dart:html';
 import 'dart:async';
 import 'dart:math';
@@ -15,7 +14,7 @@ import 'package:stagexl/stagexl.dart' as StageXL;
  * The Bombemotion Board component
  */
 @CustomTag('bombemotion-board')
-class BombemotionBoard extends PolymerElement with Client{
+class BombemotionBoard extends PolymerElement with Client {
   @published User user;
 
   @observable List<User> leaderBoard = toObservable([]);
@@ -35,7 +34,7 @@ class BombemotionBoard extends PolymerElement with Client{
   @observable String errorMessage = '';
 
   @observable bool challengeOngoing = false;
-
+  
   Stopwatch _stopWatch = new Stopwatch();
 
   Timer _challengeTimer;
@@ -47,12 +46,12 @@ class BombemotionBoard extends PolymerElement with Client{
   WebSocket _webSocket;
 
   CanvasElement canvas;
-  
+
   BombemotionBoard.created() : super.created() {
-     onConnect("anonymous");
+    onConnect("anonymous");
   }
-  
-  
+
+
   Random random = new Random();
   StageXL.Stage stage;
   StageXL.RenderLoop renderLoop;
@@ -61,7 +60,7 @@ class BombemotionBoard extends PolymerElement with Client{
   void domReady() {
     var navicon = $['navicon'];
     var drawerPanel = $['drawerPanel'];
-   // _chessBoard = $['chess_board'];
+    // _chessBoard = $['chess_board'];
 
     resize();
 
@@ -81,20 +80,20 @@ class BombemotionBoard extends PolymerElement with Client{
 
 
   void _connect() {
-    
-      canvas = this.shadowRoot.querySelector('#stage');
-      stage = new StageXL.Stage(canvas, webGL: true, width:800, height: 600);
-      stage.scaleMode = StageXL.StageScaleMode.SHOW_ALL;
-      stage.align = StageXL.StageAlign.NONE;
 
-      renderLoop = new StageXL.RenderLoop();
-      renderLoop.addStage(stage);
-      
+    canvas = this.shadowRoot.querySelector('#stage');
+    stage = new StageXL.Stage(canvas, webGL: true, width: 800, height: 600);
+    stage.scaleMode = StageXL.StageScaleMode.SHOW_ALL;
+    stage.align = StageXL.StageAlign.NONE;
+
+    renderLoop = new StageXL.RenderLoop();
+    renderLoop.addStage(stage);
+
     //Uri uri = Uri.parse(window.location.href);
     //var port = uri.port != 8080 ? 80 : 9090;
     stagexl();
-    
-   /* _webSocket = new WebSocket('ws://${uri.host}:${port}/ws')
+
+    /* _webSocket = new WebSocket('ws://${uri.host}:${port}/ws')
         ..onMessage.listen(_receive)
         ..onOpen.listen((event) {
           showStartChallenge();
@@ -114,8 +113,8 @@ class BombemotionBoard extends PolymerElement with Client{
     var fb = new Firebase('${firebaseUrl}/toplist');
     fb.onValue.listen((event) {
       List users = event.snapshot.val();
-      if (users != null) topList =
-          users.map((u) => new User.fromMap(u)).toList();
+      if (users != null) topList = users.map((u) => new User.fromMap(u)).toList();
+      print(topList);
     });
   }
 
@@ -132,12 +131,12 @@ class BombemotionBoard extends PolymerElement with Client{
     if (message.startsWith(Messages.PGN)) {
       var pgn = message.substring(Messages.PGN.length);
       print('Chess problem received: ' + pgn);
-     // ChessBoard chessBoard = $['chess_board']..position = pgn;
-     // async((_) {
-     //   chessBoard.undo();
-    //    chessBoard.reversed = chessBoard.turn == ChessBoard.BLACK;
-    //    async((_) => chessBoard.refresh());
-     // });
+      // ChessBoard chessBoard = $['chess_board']..position = pgn;
+      // async((_) {
+      //   chessBoard.undo();
+      //    chessBoard.reversed = chessBoard.turn == ChessBoard.BLACK;
+      //    async((_) => chessBoard.refresh());
+      // });
     } else if (message == Messages.STARTCHALLENGE) {
       print('Start challenge message received');
       challengeOngoing = true;
@@ -146,12 +145,10 @@ class BombemotionBoard extends PolymerElement with Client{
       _stopWatch
           ..reset()
           ..start();
-      _challengeTimer =
-          new Timer.periodic(new Duration(seconds: 1), updateChallengeTime);
+      _challengeTimer = new Timer.periodic(new Duration(seconds: 1), updateChallengeTime);
     } else if (message.startsWith(Messages.LEADERBOARD)) {
       print('Leaderboard message received');
-      List leaders =
-          JSON.decode(message.substring(Messages.LEADERBOARD.length));
+      List leaders = JSON.decode(message.substring(Messages.LEADERBOARD.length));
       leaderBoard = leaders.map((u) => new User.fromMap(u)).toList();
     } else if (message.startsWith(Messages.GAMEOVER)) {
       print('Gameover message received');
@@ -165,18 +162,15 @@ class BombemotionBoard extends PolymerElement with Client{
 
       startChallengeUsers = getUsersFromJson(msg.substring(index + 1));
 
-      startChallengeStatus =
-          'A new challenge is starting in ${seconds} seconds...';
+      startChallengeStatus = 'A new challenge is starting in ${seconds} seconds...';
       startChallengeBtnLabel = 'Join';
 
-      _pendingChallengeTimer =
-          new Timer.periodic(new Duration(milliseconds: 1000), (timer) {
+      _pendingChallengeTimer = new Timer.periodic(new Duration(milliseconds: 1000), (timer) {
         seconds--;
         if (seconds == 0) {
           timer.cancel();
         } else {
-          startChallengeStatus =
-              'Challenge is starting in ${seconds} seconds...';
+          startChallengeStatus = 'Challenge is starting in ${seconds} seconds...';
         }
       });
 
@@ -213,14 +207,11 @@ class BombemotionBoard extends PolymerElement with Client{
 
     //ChessBoard chessBoard = $['chess_board'];
     var paddingX2 = 20 * 2;
-    int height =
-        mainHeaderPanel.clientHeight -
-        mainToolbar.clientHeight -
-        paddingX2;
+    int height = mainHeaderPanel.clientHeight - mainToolbar.clientHeight - paddingX2;
     int width = mainHeaderPanel.clientWidth - paddingX2;
     int newWidth = min(height, width);
     if (newWidth > 0) {
-     /* chessBoard.style
+      /* chessBoard.style
           ..width = '${newWidth}px'
           ..height = chessBoard.style.width;
       chessBoard.resize();*/
@@ -228,14 +219,14 @@ class BombemotionBoard extends PolymerElement with Client{
   }
 
   void onMove(CustomEvent event, detail, target) {
-   // ChessBoard chessBoard = event.target;
+    // ChessBoard chessBoard = event.target;
     //if (chessBoard.gameStatus != 'checkmate') {
-     // $['try_again'].show();
-     // chessBoard.undo();
-     // chessBoard.refresh();
+    // $['try_again'].show();
+    // chessBoard.undo();
+    // chessBoard.refresh();
     //} else {
-      //_webSocket.send(Messages.CHECKMATE);
-   // }
+    //_webSocket.send(Messages.CHECKMATE);
+    // }
   }
 
   void stopChallengeClicked(Event event, var detail, Node target) {
@@ -290,15 +281,14 @@ class BombemotionBoard extends PolymerElement with Client{
   }
 
   void updateChallengeTime(Timer timer) {
-    challengeTime =
-        '${(_stopWatch.elapsedMilliseconds/1000).toStringAsFixed(0)} s';
+    challengeTime = '${(_stopWatch.elapsedMilliseconds/1000).toStringAsFixed(0)} s';
   }
 
   /// Returns the player info for the [side] ('Black' or 'White')
   String getPlayerInfo(String side) {
-   // if (_chessBoard == null) {
+    // if (_chessBoard == null) {
     //  return '';
-   // }
+    // }
     var name = "prova"; //_chessBoard.header[side];
     if (name == null) {
       return '';
@@ -309,96 +299,97 @@ class BombemotionBoard extends PolymerElement with Client{
     }
     return name;
   }
-  
-void stagexl() {
 
-  stage.mouseChildren = false;
-  stage.juggler.clear();
-  stage.removeChildren();
-  StageXL.BitmapData.load("img/logo.png").then(startAnimation);
-}
-  
-void drawBomb() {
-  stage.mouseChildren = true;
+  void stagexl() {
 
-   stage.juggler.clear();
-   stage.removeChildren();
-   stage.onMouseClick.listen(throwBomb);
+    stage.juggler.clear();
+    stage.removeChildren();
+    StageXL.BitmapData.load("img/logo.png").then(startAnimation);
+  }
 
+  void drawBomb() {
 
-   StageXL.BitmapData.load("img/bomb.png").then(startAnimation);
-}
+    stage.juggler.clear();
+    stage.removeChildren();
 
-void startAnimation(StageXL.BitmapData logoBitmapData) {
+    StageXL.BitmapData.load("img/bomb.png").then(startAnimation);
+  }
 
-  var rect = stage.contentRectangle;
-  var hue = random.nextDouble() * 2.0 - 1.0;
-  var hueFilter = new StageXL.ColorMatrixFilter.adjust(hue: hue);
+  void startAnimation(StageXL.BitmapData logoBitmapData) {
 
-  var logoBitmap = new StageXL.Bitmap(logoBitmapData)
-    ..pivotX = logoBitmapData.width ~/ 2
-    ..pivotY = logoBitmapData.height ~/ 2
-    ..x = rect.left + rect.width * random.nextDouble()
-    ..y = rect.top + rect.height * random.nextDouble()
-    ..rotation = 0.4 * random.nextDouble() - 0.2
-    ..filters = [hueFilter]
-    ..scaleX = 0.0
-    ..scaleY = 0.0
-    ..addTo(stage);
+    var rect = stage.contentRectangle;
+    var hue = random.nextDouble() * 2.0 - 1.0;
+    var hueFilter = new StageXL.ColorMatrixFilter.adjust(hue: hue);
 
-  stage.juggler.tween(logoBitmap, 1.0, StageXL.TransitionFunction.easeOutBack)
-    ..animate.scaleX.to(1.0)
-    ..animate.scaleY.to(1.0);
+    var logoBitmap = new StageXL.Bitmap(logoBitmapData)
+        ..pivotX = logoBitmapData.width ~/ 2
+        ..pivotY = logoBitmapData.height ~/ 2
+        ..x = rect.left + rect.width * random.nextDouble()
+        ..y = rect.top + rect.height * random.nextDouble()
+        ..rotation = 0.4 * random.nextDouble() - 0.2
+        ..filters = [hueFilter]
+        ..scaleX = 1.0
+        ..scaleY = 1.0;
+       // ..addTo(stage);
+    
+    StageXL.Sprite logo = new StageXL.Sprite();
+    logo.addChild(logoBitmap);
+    logo.onMouseClick.listen(throwBomb);
+    logo.addTo(stage);
+    
+    stage.juggler.tween(logo, 1.0, StageXL.TransitionFunction.easeOutBack)
+        ..animate.scaleX.to(2.0)
+        ..animate.scaleY.to(2.0);
 
-  stage.juggler.tween(logoBitmap, 1.0, StageXL.TransitionFunction.easeInBack)
-    ..delay = 1.5
-    ..animate.scaleX.to(0.0)
-    ..animate.scaleY.to(0.0)
-    ..onComplete = () => startAnimation(logoBitmapData);
+    stage.juggler.tween(logo, 1.0, StageXL.TransitionFunction.easeInBack)
+        ..delay = 1.5
+        ..animate.scaleX.to(1.0)
+        ..animate.scaleY.to(1.0)
+        ..onComplete = () => () {logo.removeFromParent; 
+        startAnimation(logoBitmapData);};
 
-  //stage.juggler.delayCall(() => startAnimation(logoBitmapData), 0.1);
-}
+    //stage.juggler.delayCall(() => startAnimation(logoBitmapData), 0.1);
+  }
 
   bombed() {
+    count = 0;
     drawBomb();
   }
-  
+
   saved() {
     hasBomb = false;
     stagexl();
   }
-  
-  
+
   die() {
     stage.mouseChildren = false;
-     stage.juggler.clear();
-     stage.removeChildren();
-     
-     var textField = new StageXL.TextField();
-       textField.defaultTextFormat = new StageXL.TextFormat("Arial", 36, StageXL.Color.Black, align: StageXL.TextFormatAlign.CENTER);
-       textField.width = 400;
-       textField.x = stage.contentRectangle.center.x - 200;
-       textField.y = stage.contentRectangle.center.y - 20;
-       textField.text = "Game OVER!";
-       textField.addTo(stage);
+    stage.juggler.clear();
+    stage.removeChildren();
+
+    var textField = new StageXL.TextField();
+    textField.defaultTextFormat = new StageXL.TextFormat("Arial", 36, StageXL.Color.Black, align: StageXL.TextFormatAlign.CENTER);
+    textField.width = 400;
+    textField.x = stage.contentRectangle.center.x - 200;
+    textField.y = stage.contentRectangle.center.y - 20;
+    textField.text = "Game OVER!";
+    textField.addTo(stage);
   }
-  
+
   survive() {
     stage.mouseChildren = false;
-     stage.juggler.clear();
-     stage.removeChildren();
-     
-     var textField = new StageXL.TextField();
-        textField.defaultTextFormat = new StageXL.TextFormat("Arial", 36, StageXL.Color.Black, align: StageXL.TextFormatAlign.CENTER);
-        textField.width = 400;
-        textField.x = stage.contentRectangle.center.x - 200;
-        textField.y = stage.contentRectangle.center.y - 20;
-        textField.text = "You Survived";
-        textField.addTo(stage);
+    stage.juggler.clear();
+    stage.removeChildren();
+
+    var textField = new StageXL.TextField();
+    textField.defaultTextFormat = new StageXL.TextFormat("Arial", 36, StageXL.Color.Black, align: StageXL.TextFormatAlign.CENTER);
+    textField.width = 400;
+    textField.x = stage.contentRectangle.center.x - 200;
+    textField.y = stage.contentRectangle.center.y - 20;
+    textField.text = "You Survived";
+    textField.addTo(stage);
   }
-  
-  void throwBomb(StageXL.Event ev){
-    saved();
+
+  void throwBomb(StageXL.Event ev) {
     launch();
   }
 
