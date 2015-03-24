@@ -23,7 +23,7 @@ void main() {
   var serveClient = portEnv == null ? true : false;
 
   const TIMEOUT = const Duration(seconds: 1);
-  var number = 30 * 2;
+  var number;
 
   Timer timer;
 
@@ -53,6 +53,10 @@ void main() {
 
 
   startTimeout() {
+    if (timer != null) {
+      timer.cancel();
+    }
+    number = 30 * 2;
     return new Timer.periodic(TIMEOUT, handleTimeout);
   }
 
@@ -64,12 +68,15 @@ void main() {
   void assignBomb() {
     var rng = new Random();
     var numbersOfPlayers = playerList.length;
-    var playerToBomb = rng.nextInt(numbersOfPlayers);
-    print("Bomb to ${playerList.elementAt(playerToBomb).name}");
-    fs.sendTo(playerList.elementAt(playerToBomb).wsId, 'bomb', {});
-    fs.sendTo(tabler.wsId, 'bomb', {
-      'name': playerList.elementAt(playerToBomb).name
-    });
+    if (numbersOfPlayers > 0) {
+      var playerToBomb = rng.nextInt(numbersOfPlayers);
+      print("Bomb to ${playerList.elementAt(playerToBomb).name}");
+      fs.sendTo(playerList.elementAt(playerToBomb).wsId, 'bomb', {});
+      fs.sendTo(tabler.wsId, 'bomb', {
+        'name': playerList.elementAt(playerToBomb).name
+      });
+    }
+
   }
 
   fs.onProfileChanged.listen((e) {
@@ -121,12 +128,20 @@ void main() {
     assignBomb();
     fs.send('go', {});
   });
-  
+
   fs.on('stop', (e, sendable) {
+    if ( timer != null ) {
+      timer.cancel();
+    }
     print("Stop");
+    var data = {
+        "count": "--"
+      };
+    fs.send("updateTime", data);
+
     fs.send('gameover', {});
   });
-  
+
   fs.on('launch', (e, sendable) {
     print("Launch");
     assignBomb();
