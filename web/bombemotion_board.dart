@@ -335,6 +335,7 @@ class BombemotionBoard extends PolymerElement with Client {
     StageXL.Sprite logo = new StageXL.Sprite();
     logo.addChild(logoBitmap);
     logo.onMouseClick.listen(throwBomb);
+    logo.onTouchTap.listen(throwBomb);
     logo.addTo(stage);
     
     stage.juggler.tween(logo, 1.0, StageXL.TransitionFunction.easeOutBack)
