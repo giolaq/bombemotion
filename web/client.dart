@@ -4,8 +4,6 @@ import 'dart:html';
 import 'package:force/force_browser.dart';
 import 'package:stagexl/stagexl.dart';
 
-import 'block_paint_object.dart';
-
 import 'dart:convert' show HtmlEscape;
 
 class Client {
@@ -38,7 +36,6 @@ class Client {
 
   DivElement timeField = querySelector("#time");
   ButtonElement launchButton = querySelector("#launchButton");
-  InputElement imageInput = querySelector("#cameraInput");
   OutputElement _output = querySelector('#list');
   DivElement gameOverElement = querySelector('#gameover');
 
@@ -50,58 +47,6 @@ class Client {
     forceClient = new ForceClient();
     forceClient.connect();
     launchButton.hidden = true;
-
-    
-
- 
-
-  void _onFilesSelected(List<File> files) {
-    _output.nodes.clear();
-    var list = new Element.tag('ul');
-    for (var file in files) {
-      var item = new Element.tag('li');
-
-      // If the file is an image, read and display its thumbnail.
-      if (file.type.startsWith('image')) {
-        var thumbHolder = new Element.tag('span');
-        var reader = new FileReader();
-        reader.onLoad.listen((e) {
-          var thumbnail = new ImageElement(src: reader.result);
-          thumbnail.classes.add('thumb');
-          thumbnail.title = sanitizer.convert(file.name);
-          thumbHolder.nodes.add(thumbnail);
-        });
-        reader.readAsDataUrl(file);
-        item.nodes.add(thumbHolder);
-      }
-
-      // For all file types, display some properties.
-      var properties = new Element.tag('span');
-      properties.innerHtml = (new StringBuffer('<strong>')
-          ..write(sanitizer.convert(file.name))
-          ..write('</strong> (')
-          ..write(file.type != null ? sanitizer.convert(file.type) : 'n/a')
-          ..write(') ')
-          ..write(file.size)
-          ..write(' bytes')
-          // TODO(jason9t): Re-enable this when issue 5070 is resolved.
-          // http://code.google.com/p/dart/issues/detail?id=5070
-          // ..add(', last modified: ')
-          // ..add(file.lastModifiedDate != null ?
-          //       file.lastModifiedDate.toLocal().toString() :
-          //       'n/a')
-      ).toString();
-      item.nodes.add(properties);
-      list.nodes.add(item);
-    }
-    _output.nodes.add(list);
-  }
-  
-  void _onFileInputChange() {
-     _onFilesSelected(imageInput.files);
-   }
-  
-    imageInput.onChange.listen((e) => _onFileInputChange());
 
     nameElement.onChange.listen((e) {
       e.preventDefault();
@@ -172,18 +117,6 @@ class Client {
       removePlayName(e.json['name']);
     });
 
-    forceClient.on("start_game", (e, sender) {
-      startGame(e.json['opponent']);
-      this.uid = e.json['gameId'];
-    });
-
-    forceClient.on("move", (e, sender) {
-      var x = e.json['x'];
-      var y = e.json['y'];
-      BlockPaint block = playlist[x][y];
-
-      block.draw(Color.Blue);
-    });
     
     forceClient.on("gameover", (e, sender) {
         gameOver();
@@ -284,32 +217,8 @@ class Client {
     var renderLoop = new RenderLoop();
     renderLoop.addStage(stage);
 
-    playlist = [[new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)], [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)], [new BlockPaint(color), new BlockPaint(color), new BlockPaint(color)]];
+   
 
-    /* Painting painting = new Painting();
-    stage.addChild(painting); */
-
-    for (int r = 0; r < 3; r++) {
-      for (int c = 0; c < 3; c++) {
-        BlockPaint block = playlist[r][c];
-        print("what is in list for $r on $c");
-
-        block.x = r * 100;
-        block.y = c * 100;
-
-        block.listen().listen((e) {
-          var request = {
-            'gameId': uid,
-            'opponent': opponent,
-            'x': r,
-            'y': c
-          };
-
-          forceClient.send("play", request);
-        });
-        stage.addChild(block);
-      }
-    }
   }
   
   void removePlayName(removedName) {

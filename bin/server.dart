@@ -20,7 +20,6 @@ void main() {
 
   var portEnv = Platform.environment['PORT'];
   var port = portEnv == null ? 8080 : int.parse(portEnv);
-  var serveClient = portEnv == null ? true : false;
 
   const TIMEOUT = const Duration(seconds: 1);
   var number;
@@ -151,6 +150,7 @@ void main() {
     // Tell Force what the start page is!
     fs.server.static("/", "index.html");
     fs.server.static("/tabellone", "table.html");
+    fs.server.static("/hounaifone", "game.html");
 
   });
 }

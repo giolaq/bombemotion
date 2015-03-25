@@ -3,7 +3,9 @@
 <head>
   <title>Bombemotion</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-touch-fullscreen" content="yes">
@@ -39,9 +41,16 @@
       border-radius: 50%;
       overflow: hidden;
     }
+    
+body.stage-full-window {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+    
   </style>
 </head>
-<body fullbleed unresolved>
+<body class="stage-full-window" fullbleed unresolved>
    <bombemotion-app></bombemotion-app>
 </body>
 </html>
