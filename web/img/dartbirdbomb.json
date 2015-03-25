@@ -1,0 +1,39 @@
+{"frames": [
+
+{
+	"filename": "dart-bird-bomb.png",
+	"frame": {"x":593,"y":2,"w":285,"h":201},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":39,"y":48,"w":285,"h":201},
+	"sourceSize": {"w":333,"h":296},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "dart-bird-bomb1.png",
+	"frame": {"x":302,"y":2,"w":289,"h":206},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":39,"y":43,"w":289,"h":206},
+	"sourceSize": {"w":333,"h":296},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "dart-bird-bomb2.png",
+	"frame": {"x":2,"y":2,"w":298,"h":206},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":31,"y":43,"w":298,"h":206},
+	"sourceSize": {"w":333,"h":296},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "dartbirdbomb.webp",
+	"format": "RGBA8888",
+	"size": {"w":880,"h":210},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3c9d3741a3f674f3a1dbecade1f841ab:3df9525c0cb65a1b2260c608f7ef17b2:fe778566deb4c8442b79652b99161f14$"
+}
+}
