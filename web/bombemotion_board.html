@@ -83,6 +83,12 @@
         horizontal-align: middle;
         font-size: 24px;
       }
+      canvas.stage-full-window {
+         width: 100%;
+         height: 100%;
+         position:fixed; 
+      }
+      
     }
     </style>
     <core-drawer-panel id="drawerPanel" rightDrawer>
@@ -110,7 +116,7 @@
           <paper-toast id="try_again" text="Try again..." duration="5000"></paper-toast>
           <!--chess-board id="chess_board" on-move="{{onMove}}"></chess-board-->
            <div id="playField">
-                <canvas id="stage" width="600" height="600"></canvas>
+                <canvas id="stage" class="stage-full-window"></canvas>
              </div>
         </div>
       </core-header-panel>

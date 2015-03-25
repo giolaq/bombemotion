@@ -86,6 +86,7 @@ class BombemotionBoard extends PolymerElement with Client {
     stage.scaleMode = StageXL.StageScaleMode.SHOW_ALL;
     stage.align = StageXL.StageAlign.NONE;
 
+    
     renderLoop = new StageXL.RenderLoop();
     renderLoop.addStage(stage);
 
@@ -327,9 +328,9 @@ class BombemotionBoard extends PolymerElement with Client {
         ..x = rect.left + rect.width * random.nextDouble()
         ..y = rect.top + rect.height * random.nextDouble()
         ..rotation = 0.4 * random.nextDouble() - 0.2
-        ..filters = [hueFilter]
-        ..scaleX = 1.0
-        ..scaleY = 1.0;
+        ..filters = [hueFilter];
+       // ..scaleX = 1.0
+      //  ..scaleY = 1.0;
        // ..addTo(stage);
     
     StageXL.Sprite logo = new StageXL.Sprite();

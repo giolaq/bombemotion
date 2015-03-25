@@ -27,7 +27,7 @@ void main() {
 
   Timer timer;
 
-  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, clientFiles: '../build/web/', clientServe: true);
+  ForceServer fs = new ForceServer(host: "0.0.0.0", port: port, keepAlive: true, clientFiles: '../build/web/', clientServe: true);
 
 
   // Setup logger
@@ -150,5 +150,7 @@ void main() {
   fs.start().then((_) {
     // Tell Force what the start page is!
     fs.server.static("/", "index.html");
+    fs.server.static("/tabellone", "table.html");
+
   });
 }
