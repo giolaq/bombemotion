@@ -33,10 +33,6 @@ class BombemotionBoard extends PolymerElement with Client {
   @observable bool challengeOngoing = false;
   @observable num counter = 0;
 
-  Stopwatch _stopWatch = new Stopwatch();
-
-  Timer _challengeTimer;
-
   bool bomb = false;
 
   CanvasElement canvas;
@@ -116,65 +112,14 @@ class BombemotionBoard extends PolymerElement with Client {
     return name;
   }
 
-  void stagexl() {
-    stage.juggler.clear();
-    stage.removeChildren();
-    StageXL.BitmapData.load("img/logo.png").then(startAnimation);
-  }
-
-  void drawBomb() {
-    stage.juggler.clear();
-    stage.removeChildren();
-
-    StageXL.BitmapData.load("img/bomb.png").then(startAnimation);
-  }
-
-  void startAnimation(StageXL.BitmapData logoBitmapData) {
-    var rect = stage.contentRectangle;
-    var hue = random.nextDouble() * 2.0 - 1.0;
-    var hueFilter = new StageXL.ColorMatrixFilter.adjust(hue: hue);
-
-    var logoBitmap = new StageXL.Bitmap(logoBitmapData)
-      ..pivotX = logoBitmapData.width ~/ 2
-      ..pivotY = logoBitmapData.height ~/ 2
-      ..x = rect.left + rect.width * 0.5 //* random.nextDouble()
-      ..y = rect.top + rect.height * 0.5 //* random.nextDouble()
-      ..rotation = 0.4 * random.nextDouble() - 0.2
-      ..filters = [hueFilter];
-    // ..scaleX = 1.0
-    //  ..scaleY = 1.0;
-    // ..addTo(stage);
-
-    StageXL.Sprite logo = new StageXL.Sprite();
-    logo.addChild(logoBitmap);
-    //logo.onMouseClick.listen(throwBomb);
-    //logo.onTouchTap.listen(throwBomb);
-    logo.addTo(stage);
-
-    stage.juggler.tween(logo, 1.0, StageXL.TransitionFunction.linear)
-      ..animate.x.to(stage.contentRectangle.right);
-
-    stage.juggler.tween(logo, 1.0, StageXL.TransitionFunction.linear)
-      ..delay = 1.5
-      ..animate.x.to(stage.contentRectangle.left)
-      ..onComplete = () => () {
-        logo.removeFromParent;
-        startAnimation(logoBitmapData);
-      };
-
-    //stage.juggler.delayCall(() => startAnimation(logoBitmapData), 0.1);
-  }
-
   bombed() {
     count = 0;
     bomb = true;
-    //drawBomb();
   }
 
   saved() {
     hasBomb = false;
     bomb = false;
-    //stagexl();
   }
 
   die() {
@@ -209,13 +154,11 @@ class BombemotionBoard extends PolymerElement with Client {
     textField.addTo(stage);
   }
 
-  void throwBomb(StageXL.Event ev, StageXL.FlipBook fb) 
-    {
+  void throwBomb(StageXL.Event ev, StageXL.FlipBook fb) {
     launch();
     counter = count;
-
+    bomb = true;
     fb.alpha = 0;
-
   }
 
   void freeBird() {
@@ -254,15 +197,17 @@ class BombemotionBoard extends PolymerElement with Client {
         ..play();
 
       bomb = false;
-      flipbook.onMouseClick
-          .listen((ev) => throwBomb(ev, flipbook));
+      flipbook.onMouseClick.listen((ev) => throwBomb(ev, flipbook));
       flipbook.onTouchTap.listen((ev) => throwBomb(ev, flipbook));
       tween = new StageXL.Tween(
           flipbook, rect.width / 200.0 / scaling, transition)
         ..animate.x.to(rect.right)
         ..onComplete = () {
           stopAnimation(flipbook);
-          bomb = true;
+          if ( hasBomb == true ) {
+            bomb = true;
+          }
+            
         };
     } else {
       flipbook = new StageXL.FlipBook(bitmapDatasDart, 50)

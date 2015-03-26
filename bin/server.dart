@@ -55,7 +55,7 @@ void main() {
     if (timer != null) {
       timer.cancel();
     }
-    number = 30 * 2;
+    number = 90 * 2;
     return new Timer.periodic(TIMEOUT, handleTimeout);
   }
 
