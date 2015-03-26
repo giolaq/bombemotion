@@ -2,6 +2,7 @@ name: forcetictactoe
 description: An example with dart force
 dependencies:
   stagexl: '0.10.3'
+  stagexl_particle: any
   force: 
     git: git://github.com/ForceUniverse/dart-force.git 
   polymer: any

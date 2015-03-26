@@ -31,13 +31,14 @@ class BombemotionBoard extends PolymerElement with Client {
   @observable String errorMessage = '';
 
   @observable bool challengeOngoing = false;
+  @observable num counter = 0;
 
   Stopwatch _stopWatch = new Stopwatch();
 
   Timer _challengeTimer;
 
   bool bomb = false;
-  
+
   CanvasElement canvas;
 
   BombemotionBoard.created() : super.created() {
@@ -76,8 +77,8 @@ class BombemotionBoard extends PolymerElement with Client {
     resourceManager = new StageXL.ResourceManager()
       ..addTextureAtlas("dartbird", "img/dart-bird-sprite.json",
           StageXL.TextureAtlasFormat.JSONARRAY)
-      ..addTextureAtlas("bomb", "img/dartbirdbomb.json",
-          StageXL.TextureAtlasFormat.JSONARRAY)
+      ..addTextureAtlas(
+          "bomb", "img/dartbirdbomb.json", StageXL.TextureAtlasFormat.JSONARRAY)
       ..load().then((result) => freeBird());
   }
 
@@ -146,8 +147,8 @@ class BombemotionBoard extends PolymerElement with Client {
 
     StageXL.Sprite logo = new StageXL.Sprite();
     logo.addChild(logoBitmap);
-    logo.onMouseClick.listen(throwBomb);
-    logo.onTouchTap.listen(throwBomb);
+    //logo.onMouseClick.listen(throwBomb);
+    //logo.onTouchTap.listen(throwBomb);
     logo.addTo(stage);
 
     stage.juggler.tween(logo, 1.0, StageXL.TransitionFunction.linear)
@@ -208,8 +209,13 @@ class BombemotionBoard extends PolymerElement with Client {
     textField.addTo(stage);
   }
 
-  void throwBomb(StageXL.Event ev) {
+  void throwBomb(StageXL.Event ev, StageXL.FlipBook fb) 
+    {
     launch();
+    counter = count;
+
+    fb.alpha = 0;
+
   }
 
   void freeBird() {
@@ -227,7 +233,7 @@ class BombemotionBoard extends PolymerElement with Client {
     //------------------------------------------------------------------
 
     var rect = stage.contentRectangle;
-    var transition = StageXL.TransitionFunction.easeInBounce;
+    var transition = StageXL.TransitionFunction.linear;
 
     var tween;
     var flipbook;
@@ -248,12 +254,16 @@ class BombemotionBoard extends PolymerElement with Client {
         ..play();
 
       bomb = false;
-      flipbook.onMouseClick.listen(throwBomb);
-      flipbook.onTouchTap.listen(throwBomb);
+      flipbook.onMouseClick
+          .listen((ev) => throwBomb(ev, flipbook));
+      flipbook.onTouchTap.listen((ev) => throwBomb(ev, flipbook));
       tween = new StageXL.Tween(
           flipbook, rect.width / 200.0 / scaling, transition)
         ..animate.x.to(rect.right)
-        ..onComplete = () { stopAnimation(flipbook); bomb = true; };
+        ..onComplete = () {
+          stopAnimation(flipbook);
+          bomb = true;
+        };
     } else {
       flipbook = new StageXL.FlipBook(bitmapDatasDart, 50)
         ..x = rect.left - 128
