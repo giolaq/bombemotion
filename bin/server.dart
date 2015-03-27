@@ -150,7 +150,5 @@ void main() {
     // Tell Force what the start page is!
     fs.server.static("/", "index.html");
     fs.server.static("/tabellone", "table.html");
-    fs.server.static("/hounaifone", "game.html");
-
   });
 }
